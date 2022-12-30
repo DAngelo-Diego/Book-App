@@ -2,6 +2,7 @@ package com.example.bookapp.di
 
 import android.content.Context
 import androidx.room.Room
+import androidx.room.RoomDatabase
 import com.example.bookapp.data.local.BookDatabase
 import com.example.bookapp.util.Constants.BOOK_DATABASE
 import dagger.Module
@@ -19,10 +20,11 @@ object DatabaseModule {
     @Singleton
     fun provideDatabase(
         @ApplicationContext context: Context
-    ) = Room.databaseBuilder(
-        context,
-        BookDatabase::class.java,
-        BOOK_DATABASE
-    ).build()
-
+    ): BookDatabase {
+        return Room.databaseBuilder(
+            context,
+            BookDatabase::class.java,
+            BOOK_DATABASE
+        ).build()
+    }
 }
