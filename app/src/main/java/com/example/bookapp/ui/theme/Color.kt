@@ -1,7 +1,6 @@
 package com.example.bookapp.ui.theme
 
 import androidx.compose.material.Colors
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
 val Purple200 = Color(0xFFBB86FC)
@@ -59,6 +58,13 @@ val Colors.buttonBackgroundColor
 
 val Colors.contentBtnText
 get() = if (isLight) buttonOnBoardingDayText else buttonOnBoardingNightText
+
+val Colors.textAppBarr
+get() = if (isLight) topBarDayText else topBarNightText
+
+val Colors.topBarBackr
+get() = if (isLight) topBarDayBack else topBarDayText
+
 
 val Colors.textAppBar
 get() = if (isLight) topBarDayText else topBarNightText
