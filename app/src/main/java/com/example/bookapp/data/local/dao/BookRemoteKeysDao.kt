@@ -7,10 +7,10 @@ import androidx.room.Query
 import com.example.bookapp.domain.model.BookRemoteKeys
 
 @Dao
-interface BookRemoteKeyDao {
+interface BookRemoteKeysDao {
 
-    @Query("SELECT * FROM book_remote_keys_table WHERE id = :id")
-    suspend fun getRemoteKeys(id: Int): BookRemoteKeys?
+    @Query("SELECT * FROM book_remote_keys_table WHERE id = :bookId")
+    suspend fun getRemoteKeys(bookId: Int): BookRemoteKeys?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addAllRemoteKeys(bookRemoteKeys: List<BookRemoteKeys>)
