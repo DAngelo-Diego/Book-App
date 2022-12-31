@@ -1,17 +1,17 @@
 package com.example.bookapp.presentation.screens.home
 
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.example.bookapp.presentation.components.RatingWidget
-import com.example.bookapp.ui.theme.LARGE_PADDING
+import com.example.bookapp.presentation.common.ListContent
 
 @Composable
 fun HomeScreen(
-    homeViewModel: HomeViewModel = hiltViewModel()
+    homeViewModel: HomeViewModel = hiltViewModel(),
+    navController: NavHostController
 ) {
 
     val allBooks =homeViewModel.getAllBooks.collectAsLazyPagingItems()
@@ -19,9 +19,9 @@ fun HomeScreen(
     Scaffold(
         topBar = {
             HomeTopBar(onSearchClicked = {})
+        },
+        content = {
+            ListContent(books = allBooks, navController = navController)
         }
-    ) {
-        RatingWidget(modifier = Modifier.padding(all = LARGE_PADDING), rating = 3.5)
-    }
-
+    )
 }
