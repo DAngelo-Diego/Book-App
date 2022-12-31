@@ -1,9 +1,11 @@
 package com.example.bookapp.presentation.components
 
+import android.util.Log
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
@@ -15,8 +17,11 @@ import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.graphics.vector.PathParser
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.max
 import com.example.bookapp.R
+import com.example.bookapp.ui.theme.EXTRA_SMALL_PADDING
 import com.example.bookapp.ui.theme.LightGray
 import com.example.bookapp.ui.theme.starColor
 
@@ -24,8 +29,11 @@ import com.example.bookapp.ui.theme.starColor
 fun RatingWidget(
     modifier: Modifier,
     rating: Double,
-    scaleFactor: Float = 2f
+    scaleFactor: Float = 2f,
+    spaceBetween: Dp = EXTRA_SMALL_PADDING
 ) {
+
+    val result = calculateStar(rating = rating)
 
     val starPathString = stringResource(id = R.string.star_icon)
     val starPath = remember {
@@ -35,11 +43,39 @@ fun RatingWidget(
         starPath.getBounds()
     }
 
-    FilledStar(
-        starPath = starPath,
-        starPathBounds = starPathBounds,
-        scaleFactor = scaleFactor
-    )
+    Row(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.spacedBy(spaceBetween)
+    ) {
+        result["filledStars"]?.let {
+            repeat(it) {
+                FilledStar(
+                    starPath = starPath,
+                    starPathBounds = starPathBounds,
+                    scaleFactor = scaleFactor
+                )
+            }
+        }
+        result["halfFilledStars"]?.let {
+            repeat(it) {
+                FilledHalfStar(
+                    starPath = starPath,
+                    starPathBounds = starPathBounds,
+                    scaleFactor = scaleFactor
+                )
+            }
+        }
+
+        result["emptyStars"]?.let {
+            repeat(it) {
+                EmptyStar(
+                    starPath = starPath,
+                    starPathBounds = starPathBounds,
+                    scaleFactor = scaleFactor
+                )
+            }
+        }
+    }
 
 }
 
@@ -130,6 +166,43 @@ fun EmptyStar(
 }
 
 @Composable
+fun calculateStar(rating: Double): Map<String, Int> {
+    val maxStars by remember { mutableStateOf(5) }
+    var filledStars by remember { mutableStateOf(0) }
+    var halfFilledStars by remember { mutableStateOf(0) }
+    var emptyStars by remember { mutableStateOf(0) }
+
+    LaunchedEffect(key1 = rating) {
+        val (firstNUmber, secondNumber) = rating.toString()
+            .split(".")
+            .map { it.toInt() }
+
+        if (firstNUmber in 0..5 && secondNumber in 0..9) {
+            filledStars = firstNUmber
+            if (secondNumber in 1..5) {
+                halfFilledStars++
+            }
+            if (secondNumber in 6..9) {
+                filledStars++
+            }
+            if (firstNUmber == 5 && secondNumber > 0) {
+                emptyStars = 5
+                filledStars = 0
+                halfFilledStars = 0
+            }
+        } else {
+            Log.d("RatingWidget", "invalid rating number.")
+        }
+    }
+    emptyStars = maxStars - (filledStars + halfFilledStars)
+    return mapOf(
+        "filledStars" to filledStars,
+        "halfFilledStars" to halfFilledStars,
+        "emptyStars" to emptyStars
+    )
+}
+
+@Composable
 @Preview(showBackground = true)
 fun FilledStarPreview() {
     val starPathString = stringResource(id = R.string.star_icon)
@@ -165,5 +238,5 @@ fun EmptyStarPreview() {
     val starPathBounds = remember {
         starPath.getBounds()
     }
-    EmptyStar(starPath = starPath, starPathBounds = starPathBounds , scaleFactor = 3f )
+    EmptyStar(starPath = starPath, starPathBounds = starPathBounds, scaleFactor = 3f)
 }
