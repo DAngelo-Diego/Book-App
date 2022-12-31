@@ -35,6 +35,8 @@ val topBarNightText = Color(0xFFF2F2F5)
 val topBarDayBack = Color(0xFFEED5BC)
 val topBarNightBack = Color(0xFF3C3C4B)
 
+val starColor = Color(0xFFFFC107)
+
 
 
 val Colors.welcomeScreenBackgroundColor
