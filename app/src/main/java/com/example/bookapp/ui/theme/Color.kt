@@ -39,6 +39,7 @@ val starColor = Color(0xFFFFC107)
 
 
 
+
 val Colors.welcomeScreenBackgroundColor
     get() = if (isLight) LightGray else DarkGray
 
@@ -60,12 +61,6 @@ val Colors.buttonBackgroundColor
 
 val Colors.contentBtnText
 get() = if (isLight) buttonOnBoardingDayText else buttonOnBoardingNightText
-
-val Colors.textAppBarr
-get() = if (isLight) topBarDayText else topBarNightText
-
-val Colors.topBarBackr
-get() = if (isLight) topBarDayBack else topBarDayText
 
 
 val Colors.textAppBar
