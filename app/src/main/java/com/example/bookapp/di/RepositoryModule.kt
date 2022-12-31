@@ -5,6 +5,7 @@ import com.example.bookapp.data.repository.DataStoreOperationsImpl
 import com.example.bookapp.data.repository.Repository
 import com.example.bookapp.domain.repository.DataStoreOperations
 import com.example.bookapp.domain.use_cases.UseCases
+import com.example.bookapp.domain.use_cases.get_all_books.GetAllBooksUseCase
 import com.example.bookapp.domain.use_cases.read_onboarding.ReadOnBoardingUseCase
 import com.example.bookapp.domain.use_cases.save_onboarding.SaveOnBoardingUseCase
 import dagger.Module
@@ -31,7 +32,8 @@ object RepositoryModule {
     fun provideUseCases(repository: Repository): UseCases {
         return UseCases(
             saveOnBoardingUseCase = SaveOnBoardingUseCase(repository),
-            readOnBoardingUseCase = ReadOnBoardingUseCase(repository)
+            readOnBoardingUseCase = ReadOnBoardingUseCase(repository),
+            getAllBooksUseCase = GetAllBooksUseCase(repository)
         )
     }
 
