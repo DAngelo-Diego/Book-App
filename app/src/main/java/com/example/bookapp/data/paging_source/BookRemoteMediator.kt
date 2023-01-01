@@ -15,9 +15,21 @@ class BookRemoteMediator(
     private val bookApi: BookApi, private val bookDatabase: BookDatabase
 ) : RemoteMediator<Int, Book>() {
 
-
     private val bookDao = bookDatabase.bookDao()
     private val bookRemoteKeysDao = bookDatabase.bookRemoteKeysDao()
+
+    override suspend fun initialize(): InitializeAction {
+        val currentTime = System.currentTimeMillis()
+        val lastUpdated = bookRemoteKeysDao.getRemoteKeys(bookId = 1)?.lastUpdated ?: 0
+        val cacheTimeOut = 1440 //here only the minutes we want to save the data until we made another request to the backend server
+
+        val diffInMinutes = (currentTime - lastUpdated) / 1000 / 60
+        return if (diffInMinutes.toInt() <= cacheTimeOut) {
+            InitializeAction.SKIP_INITIAL_REFRESH
+        } else {
+            InitializeAction.LAUNCH_INITIAL_REFRESH
+        }
+    }
 
     override suspend fun load(loadType: LoadType, state: PagingState<Int, Book>): MediatorResult {
         return try {
@@ -30,13 +42,13 @@ class BookRemoteMediator(
                 LoadType.PREPEND -> {
                     val remoteKeys = getRemoteKeysForFirstItem(state)
                     val prevPage = remoteKeys?.prevPage
-                        ?: return MediatorResult.Success(endOfPaginationReached =  remoteKeys != null)
+                        ?: return MediatorResult.Success(endOfPaginationReached = remoteKeys != null)
                     prevPage
                 }
                 LoadType.APPEND -> {
                     val remoteKeys = getRemoteKeysForLastItem(state)
                     val nextPage = remoteKeys?.nextPage
-                        ?: return MediatorResult.Success(endOfPaginationReached = remoteKeys!= null)
+                        ?: return MediatorResult.Success(endOfPaginationReached = remoteKeys != null)
                     nextPage
                 }
             }
@@ -52,7 +64,10 @@ class BookRemoteMediator(
                     val nextPage = response.nextPage
                     val keys = response.books.map { book ->
                         BookRemoteKeys(
-                            id = book.id, prevPage = prevPage, nextPage = nextPage
+                            id = book.id,
+                            prevPage = prevPage,
+                            nextPage = nextPage,
+                            lastUpdated = response.lastUpdated
                         )
                     }
                     bookRemoteKeysDao.addAllRemoteKeys(bookRemoteKeys = keys)
@@ -66,8 +81,8 @@ class BookRemoteMediator(
     }
 
     private suspend fun getRemoteKeysForLastItem(state: PagingState<Int, Book>)
-    : BookRemoteKeys? {
-        return state.pages.lastOrNull {it.data.isNotEmpty()}?.data?.lastOrNull()
+            : BookRemoteKeys? {
+        return state.pages.lastOrNull { it.data.isNotEmpty() }?.data?.lastOrNull()
             ?.let { book ->
                 bookRemoteKeysDao.getRemoteKeys(bookId = book.id)
             }
@@ -75,14 +90,17 @@ class BookRemoteMediator(
 
 
     private suspend fun getRemoteKeyClosestToCurrentPosition(state: PagingState<Int, Book>)
-    : BookRemoteKeys? {
-        return state.anchorPosition?.let {
-                position -> state.closestItemToPosition(position)?.id?.let { id
-            -> bookRemoteKeysDao.getRemoteKeys(bookId = id) } }
+            : BookRemoteKeys? {
+        return state.anchorPosition?.let { position ->
+            state.closestItemToPosition(position)?.id?.let { id
+                ->
+                bookRemoteKeysDao.getRemoteKeys(bookId = id)
+            }
+        }
     }
 
     private suspend fun getRemoteKeysForFirstItem(state: PagingState<Int, Book>)
-            :BookRemoteKeys? {
+            : BookRemoteKeys? {
         return state.pages.firstOrNull { it.data.isNotEmpty() }?.data?.firstOrNull()
             ?.let { book ->
                 bookRemoteKeysDao.getRemoteKeys(bookId = book.id)
