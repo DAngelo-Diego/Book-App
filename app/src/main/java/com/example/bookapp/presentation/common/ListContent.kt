@@ -84,6 +84,7 @@ fun handingPagingResult(
                 false
             }
             error != null -> {
+                EmptyScreen(error = error)
                 false
             }
             else -> true
