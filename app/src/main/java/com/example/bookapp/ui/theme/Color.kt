@@ -37,6 +37,11 @@ val topBarNightBack = Color(0xFF3C3C4B)
 
 val starColor = Color(0xFFFFC107)
 
+val ShimmerLightGray = Color(0xFFF1F1F1)
+val ShimmerMediumGray = Color(0xFFE3E3E3)
+val ShimmerDarkGray = Color(0xFF1D1D1D)
+
+
 
 
 
