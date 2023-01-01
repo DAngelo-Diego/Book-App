@@ -22,6 +22,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.items
 import coil.compose.AsyncImage
@@ -30,6 +31,7 @@ import com.example.bookapp.R
 import com.example.bookapp.domain.model.Book
 import com.example.bookapp.navigation.Screen
 import com.example.bookapp.presentation.components.RatingWidget
+import com.example.bookapp.presentation.components.ShimmerEffect
 import com.example.bookapp.ui.theme.*
 import com.example.bookapp.util.Constants.BASE_URL
 
@@ -39,22 +41,54 @@ fun ListContent(
     books: LazyPagingItems<Book>,
     navController: NavHostController
 ) {
-    LazyColumn(
-        contentPadding = PaddingValues(all = SMALL_PADDING),
-        verticalArrangement = Arrangement.spacedBy(
-            SMALL_PADDING
-        )
-    ) {
-        items(
-            items = books,
-            key = { book ->
-                book.id
-            }
-        ){ book ->
-            book?.let {
-                BookItem(book = it, navController = navController)
+    val result = handingPagingResult(books = books)
+
+    if (result){
+        LazyColumn(
+            contentPadding = PaddingValues(all = SMALL_PADDING),
+            verticalArrangement = Arrangement.spacedBy(
+                SMALL_PADDING
+            )
+        ) {
+            items(
+                items = books,
+                key = { book ->
+                    book.id
+                }
+            ){ book ->
+                book?.let {
+                    BookItem(book = it, navController = navController)
+                }
             }
         }
+    }
+
+
+}
+
+@Composable
+fun handingPagingResult(
+    books: LazyPagingItems<Book>
+): Boolean {
+    books.apply {
+        val error = when {
+            loadState.refresh is LoadState.Error -> loadState.refresh as LoadState.Error
+            loadState.prepend is LoadState.Error -> loadState.prepend as LoadState.Error
+            loadState.append is LoadState.Error -> loadState.append as LoadState.Error
+            else -> null
+        }
+
+        return when {
+            loadState.refresh is LoadState.Loading -> {
+                ShimmerEffect()
+                false
+            }
+            error != null -> {
+                false
+            }
+            else -> true
+        }
+
     }
 }
 
