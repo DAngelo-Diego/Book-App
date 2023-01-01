@@ -3,6 +3,7 @@ package com.example.bookapp.presentation.common
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.MaterialTheme
@@ -22,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.items
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.bookapp.R
@@ -37,7 +39,23 @@ fun ListContent(
     books: LazyPagingItems<Book>,
     navController: NavHostController
 ) {
-
+    LazyColumn(
+        contentPadding = PaddingValues(all = SMALL_PADDING),
+        verticalArrangement = Arrangement.spacedBy(
+            SMALL_PADDING
+        )
+    ) {
+        items(
+            items = books,
+            key = { book ->
+                book.id
+            }
+        ){ book ->
+            book?.let {
+                BookItem(book = it, navController = navController)
+            }
+        }
+    }
 }
 
 
@@ -46,11 +64,12 @@ fun BookItem(
     book: Book,
     navController: NavHostController
 ) {
-    Box(modifier = Modifier
-        .height(BOOK_ITEM_HEIGHT)
-        .clickable {
-            navController.navigate(Screen.Details.passHeroId(heroId = book.id))
-        },
+    Box(
+        modifier = Modifier
+            .height(BOOK_ITEM_HEIGHT)
+            .clickable {
+                navController.navigate(Screen.Details.passHeroId(heroId = book.id))
+            },
         contentAlignment = Alignment.BottomStart
     ) {
 
@@ -118,29 +137,33 @@ fun BookItem(
 @Preview
 @Composable
 fun BookItemPreview() {
-    BookItem(book = Book(
-        id = 1,
-        name = "Jetpack Compose",
-        image = "",
-        about = "We are going to japan lalalalallalalalallalalalalalalalsxlaslksakjncsjacnjksancjk...",
-        rating = 3.5,
-        month = "March",
-        day = "15",
-        tags = listOf()
-    ), navController = rememberNavController())
+    BookItem(
+        book = Book(
+            id = 1,
+            name = "Jetpack Compose",
+            image = "",
+            about = "We are going to japan lalalalallalalalallalalalalalalalsxlaslksakjncsjacnjksancjk...",
+            rating = 3.5,
+            month = "March",
+            day = "15",
+            tags = listOf()
+        ), navController = rememberNavController()
+    )
 }
 
 @Preview(uiMode = UI_MODE_NIGHT_YES)
 @Composable
 fun BookItemNightPreview() {
-    BookItem(book = Book(
-        id = 1,
-        name = "Jetpack nO COMPOSE",
-        image = "",
-        about = "We are going to japan...",
-        rating = 3.5,
-        month = "March",
-        day = "15",
-        tags = listOf()
-    ), navController = rememberNavController())
+    BookItem(
+        book = Book(
+            id = 1,
+            name = "Jetpack nO COMPOSE",
+            image = "",
+            about = "We are going to japan...",
+            rating = 3.5,
+            month = "March",
+            day = "15",
+            tags = listOf()
+        ), navController = rememberNavController()
+    )
 }
