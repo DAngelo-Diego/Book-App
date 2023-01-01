@@ -36,7 +36,7 @@ fun AnimatedShimmerEffect() {
         targetValue = 0f,
         animationSpec = infiniteRepeatable(
             animation = tween(
-                durationMillis = 300,
+                durationMillis = 550,
                 easing = FastOutSlowInEasing
             ),
             repeatMode = RepeatMode.Reverse
