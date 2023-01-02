@@ -84,7 +84,7 @@ fun handingPagingResult(
                 false
             }
             error != null -> {
-                EmptyScreen(error = error)
+                EmptyScreen(error = error, books = books)
                 false
             }
             books.itemCount < 1 ->{
