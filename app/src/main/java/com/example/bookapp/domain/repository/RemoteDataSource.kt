@@ -6,5 +6,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface RemoteDataSource {
     fun getAllBooks(): Flow<PagingData<Book>>
-    fun searchBooks(): Flow<PagingData<Book>>
+    fun searchBooks(query: String): Flow<PagingData<Book>>
 }

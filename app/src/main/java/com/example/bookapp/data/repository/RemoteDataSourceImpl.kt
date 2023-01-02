@@ -6,6 +6,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.example.bookapp.data.local.BookDatabase
 import com.example.bookapp.data.paging_source.BookRemoteMediator
+import com.example.bookapp.data.paging_source.SearchBooksSource
 import com.example.bookapp.data.remote.BookApi
 import com.example.bookapp.domain.model.Book
 import com.example.bookapp.domain.repository.RemoteDataSource
@@ -32,7 +33,12 @@ class RemoteDataSourceImpl(
         ).flow
     }
 
-    override fun searchBooks(): Flow<PagingData<Book>> {
-        TODO("Not yet implemented")
+    override fun searchBooks(query: String): Flow<PagingData<Book>> {
+        return Pager(
+            config = PagingConfig(pageSize = ITEMS_PER_PAGE),
+            pagingSourceFactory = {
+                SearchBooksSource(bookApi = bookApi, query = query )
+            }
+        ).flow
     }
 }
