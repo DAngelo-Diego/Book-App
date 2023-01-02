@@ -29,10 +29,10 @@ import java.net.SocketTimeoutException
 
 @Composable
 fun EmptyScreen(error: LoadState.Error? = null) {
-    val message by remember {
+    var message by remember {
         mutableStateOf("Find the topic you want!")
     }
-    val icon by remember {
+    var icon by remember {
         mutableStateOf(
             when (message) {
                 "Server Unavailable." -> {
@@ -41,16 +41,19 @@ fun EmptyScreen(error: LoadState.Error? = null) {
                 "Not Internet" -> {
                     R.drawable.notinternet
                 }
-                else -> {  R.drawable.search_screen
+                "Find the topic you want!" -> {
+                    R.drawable.search_screen
+                }
+                else -> {  R.drawable.serverunavailable
                 }
             }
         )
     }
 
-    /*if (error != null){
+    if (error != null){
         message = parseErrorMessage(error = error)
         icon = R.drawable.serverunavailable
-    }*/
+    }
 
     var starAnimation by remember { mutableStateOf(false) }
 

@@ -33,10 +33,10 @@ fun AnimatedShimmerEffect() {
     val transition = rememberInfiniteTransition()
     val alphaAnimation by transition.animateFloat(
         initialValue = 1f,
-        targetValue = 0.5f,
+        targetValue = 0.6f,
         animationSpec = infiniteRepeatable(
             animation = tween(
-                durationMillis = 550,
+                durationMillis = 350,
                 easing = FastOutSlowInEasing
             ),
             repeatMode = RepeatMode.Reverse
@@ -53,7 +53,7 @@ fun ShimmerItem(alpha: Float) {
             .fillMaxWidth()
             .height(BOOK_ITEM_HEIGHT),
         color = if (isSystemInDarkTheme())
-            Color.Black else LightGray,
+            ShimmerDarkGray else ShimmerLightGray,
         shape = RoundedCornerShape(size = LARGE_PADDING)
     ) {
         Column(
@@ -69,7 +69,7 @@ fun ShimmerItem(alpha: Float) {
                     .fillMaxWidth(0.45f)
                     .height(NAME_PLACEHOLDER_HEIGHT),
                 color = if (isSystemInDarkTheme())
-                    ShimmerDarkGray else ShimmerMediumGray,
+                    ShimmerBarsDark else ShimmerBarsLight,
                 shape = RoundedCornerShape(size = SMALL_PADDING)
             ) {}
             Spacer(modifier = Modifier.padding(all = SMALL_PADDING))
@@ -80,7 +80,7 @@ fun ShimmerItem(alpha: Float) {
                         .fillMaxWidth()
                         .height(ABOUT_PLACEHOLDER_HEIGHT),
                     color = if (isSystemInDarkTheme())
-                        ShimmerDarkGray else ShimmerMediumGray,
+                        ShimmerBarsDark else ShimmerBarsLight,
                     shape = RoundedCornerShape(size = SMALL_PADDING)
                 ) {}
                 Spacer(modifier = Modifier.padding(all = SMALL_PADDING))
@@ -92,7 +92,7 @@ fun ShimmerItem(alpha: Float) {
                             .alpha(alpha = alpha)
                             .size(STARS_PLACEHOLDER_HEIGHT),
                         color = if (isSystemInDarkTheme())
-                            ShimmerDarkGray else ShimmerMediumGray,
+                            ShimmerBarsDark else ShimmerBarsLight,
                         shape = RoundedCornerShape(size = SMALL_PADDING)
                     ) {}
                     Spacer(modifier = Modifier.padding(all = SMALL_PADDING))
