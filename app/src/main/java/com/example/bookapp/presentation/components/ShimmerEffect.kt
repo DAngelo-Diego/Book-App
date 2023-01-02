@@ -33,7 +33,7 @@ fun AnimatedShimmerEffect() {
     val transition = rememberInfiniteTransition()
     val alphaAnimation by transition.animateFloat(
         initialValue = 1f,
-        targetValue = 0f,
+        targetValue = 0.5f,
         animationSpec = infiniteRepeatable(
             animation = tween(
                 durationMillis = 550,

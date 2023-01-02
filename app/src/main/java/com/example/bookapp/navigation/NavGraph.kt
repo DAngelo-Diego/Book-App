@@ -10,6 +10,7 @@ import androidx.navigation.navArgument
 import com.example.bookapp.presentation.screens.home.HomeScreen
 import com.example.bookapp.presentation.screens.splash.SplashScreen
 import com.example.bookapp.presentation.screens.welcome.WelcomeScreen
+import com.example.bookapp.presentation.search.SearchScreen
 import com.example.bookapp.util.Constants.DETAILS_ARGUMENT_KEY
 import com.google.accompanist.pager.ExperimentalPagerApi
 
@@ -39,7 +40,7 @@ fun SetupNavGraph(navController: NavHostController) {
 
         }
         composable(route = Screen.Search.route) {
-
+            SearchScreen()
         }
     }
 }
