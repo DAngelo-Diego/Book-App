@@ -6,6 +6,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.example.bookapp.navigation.Screen
 import com.example.bookapp.presentation.common.ListContent
 
 @Composable
@@ -18,7 +19,9 @@ fun HomeScreen(
 
     Scaffold(
         topBar = {
-            HomeTopBar(onSearchClicked = {})
+            HomeTopBar(onSearchClicked = {
+                navController.navigate(Screen.Search.route)
+            })
         },
         content = {
             ListContent(books = allBooks, navController = navController)

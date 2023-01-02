@@ -17,9 +17,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.example.bookapp.R
 import com.example.bookapp.ui.theme.TOP_APPBAR_HEIGHT
 import com.example.bookapp.ui.theme.contentBtnText
+import com.example.bookapp.ui.theme.descOnBoardingDay
 import com.example.bookapp.ui.theme.topBarBack
 
 
@@ -44,8 +46,8 @@ fun SearchWidget(
         modifier = Modifier
             .fillMaxWidth()
             .height(TOP_APPBAR_HEIGHT),
-        elevation = AppBarDefaults.TopAppBarElevation,
-        color = MaterialTheme.colors.topBarBack
+        color = descOnBoardingDay,
+        elevation = 15.dp
     ) {
         TextField(
             modifier = Modifier
@@ -68,6 +70,7 @@ fun SearchWidget(
                     onClick = {}
                 ) {
                     Icon(
+                        modifier = Modifier.alpha(alpha = ContentAlpha.medium),
                         imageVector = Icons.Default.Search,
                         contentDescription = stringResource(R.string.search__icon),
                         tint = MaterialTheme.colors.contentBtnText
@@ -101,7 +104,8 @@ fun SearchWidget(
             ),
             colors = TextFieldDefaults.textFieldColors(
                 backgroundColor = Color.Transparent,
-                cursorColor = MaterialTheme.colors.contentBtnText
+                cursorColor = MaterialTheme.colors.contentBtnText,
+                focusedIndicatorColor = MaterialTheme.colors.contentBtnText.copy(alpha = 0.5f)
             )
         )
     }
