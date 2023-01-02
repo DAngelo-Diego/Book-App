@@ -6,6 +6,7 @@ import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.example.bookapp.presentation.common.ListContent
 
 @Composable
 fun SearchScreen(
@@ -17,18 +18,22 @@ fun SearchScreen(
 
     val books = searchViewModel.searchedBooks.collectAsLazyPagingItems()
 
-    Scaffold(topBar = { SearchTopBar(
-        text = searchQuery,
-        onTextChanged = {
-                        searchViewModel.updateSearchQuery(query = it)
+    Scaffold(topBar = {
+        SearchTopBar(
+            text = searchQuery,
+            onTextChanged = {
+                searchViewModel.updateSearchQuery(query = it)
+            },
+            onSearchClicked = {
+                searchViewModel.searchBooks(query = it)
+            },
+            onClosedClicked = {
+                navController.popBackStack()
+                }
+            )
         },
-        onSearchClicked = {
-                          searchViewModel.searchBooks(query = it)
-        },
-        onClosedClicked = {
-            navController.popBackStack()
+        content = {
+            ListContent(books = books, navController = navController)
         }
-    ) }) {
-
-    }
+    )
 }
