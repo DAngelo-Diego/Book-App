@@ -13,16 +13,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.bookapp.R
-import com.example.bookapp.ui.theme.TOP_APPBAR_HEIGHT
-import com.example.bookapp.ui.theme.contentBtnText
-import com.example.bookapp.ui.theme.descOnBoardingDay
-import com.example.bookapp.ui.theme.topBarBack
+import com.example.bookapp.ui.theme.*
 
 
 @Composable
@@ -42,12 +40,15 @@ fun SearchWidget(
     onSearchClicked: (String) -> Unit,
     onClosedClicked: () -> Unit
 ) {
+
+    val focusManager = LocalFocusManager.current
+
     Surface(
         modifier = Modifier
             .fillMaxWidth()
             .height(TOP_APPBAR_HEIGHT),
-        color = descOnBoardingDay,
-        elevation = 15.dp
+        color = MaterialTheme.colors.topBarSearch,
+        elevation = 6.dp
     ) {
         TextField(
             modifier = Modifier
@@ -58,11 +59,11 @@ fun SearchWidget(
                 Text(
                     modifier = Modifier.alpha(alpha = ContentAlpha.medium),
                     text = "Search your topic...",
-                    color = Color.White
+                    color = MaterialTheme.colors.topBarText
                 )
             },
             textStyle = TextStyle(
-                color =  MaterialTheme.colors.contentBtnText
+                color =  MaterialTheme.colors.topBarText
             ),
             singleLine = true,
             leadingIcon = {
@@ -70,10 +71,10 @@ fun SearchWidget(
                     onClick = {}
                 ) {
                     Icon(
-                        modifier = Modifier.alpha(alpha = ContentAlpha.medium),
+                        modifier = Modifier.alpha(alpha = 0.4f),
                         imageVector = Icons.Default.Search,
                         contentDescription = stringResource(R.string.search__icon),
-                        tint = MaterialTheme.colors.contentBtnText
+                        tint = MaterialTheme.colors.topBarText
                     )
                 }
             },
@@ -90,7 +91,7 @@ fun SearchWidget(
                     Icon(
                         imageVector = Icons.Default.Close,
                         contentDescription = stringResource(R.string.close_icon),
-                        tint = MaterialTheme.colors.contentBtnText
+                        tint = MaterialTheme.colors.topBarText
                     )
                 }
             },
@@ -100,12 +101,14 @@ fun SearchWidget(
             keyboardActions = KeyboardActions(
                 onSearch = {
                     onSearchClicked(text)
+                    focusManager.clearFocus()
                 }
             ),
             colors = TextFieldDefaults.textFieldColors(
                 backgroundColor = Color.Transparent,
                 cursorColor = MaterialTheme.colors.contentBtnText,
-                focusedIndicatorColor = MaterialTheme.colors.contentBtnText.copy(alpha = 0.5f)
+                focusedIndicatorColor = MaterialTheme.colors.topBarText.copy(alpha = 0.4f),
+                unfocusedIndicatorColor = MaterialTheme.colors.topBarText.copy(alpha = 0.2f)
             )
         )
     }

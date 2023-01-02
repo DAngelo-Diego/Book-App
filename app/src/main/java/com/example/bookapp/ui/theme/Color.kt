@@ -29,20 +29,24 @@ val buttonOnBoardingNight = Color(0xFFF9A826)
 val buttonOnBoardingDayText = Color(0xFFFBF9F7)
 val buttonOnBoardingNightText = Color(0xFF1D1D27)
 
-val topBarDayText = Color(0xFF1F1E1D)
+val topBarDayText = Color(0xFF70655D)
 val topBarNightText = Color(0xFFF2F2F5)
 
-val topBarDayBack = Color(0xFFEED5BC)
-val topBarNightBack = Color(0xFF3C3C4B)
+val topBarDayBack = Color(0xFFFBF9F7)
+val topBarNightBack = Color(0xFF1D1D27)
 
 val starColor = Color(0xFFFFC107)
 
-val ShimmerLightGray = Color(0xFFF1F1F1)
-val ShimmerMediumGray = Color(0xFFE3E3E3)
-val ShimmerDarkGray = Color(0xFF1D1D1D)
+val ShimmerLightGray = Color(0xFFF3EFEB)
+val ShimmerBarsLight = Color(0xFFE3DAD4)
+val ShimmerDarkGray = Color(0xFF2B2B39)
+val ShimmerBarsDark = Color(0xFF37374A)
 
+val topBarSearchLight = Color(0xFFFBF9F7)
+val topBarSearchDark = Color(0xFF1D1D27)
 
-
+val topBarSearchLightText = Color(0xFF1F1E1D)
+val topBarSearchDarkText = Color(0xFFF2F2F5)
 
 
 val Colors.welcomeScreenBackgroundColor
@@ -72,4 +76,10 @@ val Colors.textAppBar
 get() = if (isLight) topBarDayText else topBarNightText
 
 val Colors.topBarBack
-get() = if (isLight) topBarDayBack else topBarDayText
+get() = if (isLight) topBarDayBack else topBarNightBack
+
+val Colors.topBarSearch
+    get() = if (isLight) topBarSearchLight else topBarSearchDark
+
+val Colors.topBarText
+    get() = if (isLight) topBarSearchLightText else topBarSearchDarkText
