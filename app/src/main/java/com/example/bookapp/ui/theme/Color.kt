@@ -83,3 +83,7 @@ val Colors.topBarSearch
 
 val Colors.topBarText
     get() = if (isLight) topBarSearchLightText else topBarSearchDarkText
+
+
+val Colors.statusBarColor
+    get() = if (isLight) topBarSearchLight else topBarSearchDark

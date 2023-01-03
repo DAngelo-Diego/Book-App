@@ -2,10 +2,16 @@ package com.example.bookapp.presentation.screens.details
 
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.example.bookapp.util.Constants.BASE_URL
+import com.example.bookapp.util.PaletteGenerator.convertImageUrlToBitMap
+import com.example.bookapp.util.PaletteGenerator.extractColorFromBitmap
+import kotlinx.coroutines.flow.collectLatest
 
 @ExperimentalMaterialApi
 @Composable
@@ -15,6 +21,33 @@ fun DetailsScreen(
 
 ) {
     val selectedBook by detailsViewModel.selectedBook.collectAsState()
+    val colorPalette by detailsViewModel.colorPalette
 
-    DetailsContent(navController = navController, selectedBook = selectedBook)
-}
+    if (colorPalette.isNotEmpty()){
+        DetailsContent(navController = navController, selectedBook = selectedBook, colors = colorPalette)
+    } else {
+        detailsViewModel.generateColorPalette()
+    }
+
+    val context = LocalContext.current
+
+    LaunchedEffect(key1 = true){
+        detailsViewModel.uiEvent.collectLatest { event ->
+            when(event){
+                is UiEvent.GenerateColorPalette -> {
+                    val bitmap = convertImageUrlToBitMap(
+                         imageUrl = "$BASE_URL${selectedBook?.image}",
+                        context = context
+                    )
+                    if (bitmap != null){
+                        detailsViewModel.setColorPalette(
+                            colors = extractColorFromBitmap(bitmap = bitmap)
+                        )
+                    }
+                }
+            }
+                }
+        }
+    }
+
+
