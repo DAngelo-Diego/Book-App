@@ -4,6 +4,8 @@ import android.content.Context
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.bookapp.data.local.BookDatabase
+import com.example.bookapp.data.repository.LocalDataSourceImpl
+import com.example.bookapp.domain.repository.LocalDataSource
 import com.example.bookapp.util.Constants.BOOK_DATABASE
 import dagger.Module
 import dagger.Provides
@@ -27,4 +29,13 @@ object DatabaseModule {
             BOOK_DATABASE
         ).build()
     }
+
+    @Provides
+    @Singleton
+    fun provideLocalDataSource(bookDatabase: BookDatabase): LocalDataSource {
+        return LocalDataSourceImpl(
+            bookDatabase = bookDatabase
+        )
+    }
+
 }
