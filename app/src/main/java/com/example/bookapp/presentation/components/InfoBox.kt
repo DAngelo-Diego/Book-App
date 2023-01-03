@@ -1,4 +1,4 @@
-package com.example.bookapp.presentation.common
+package com.example.bookapp.presentation.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
