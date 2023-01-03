@@ -10,4 +10,7 @@
     <string name="search__icon">Search Icon</string>
     <string name="close_icon">Close Icon</string>
     <string name="info_icon">Info Icon</string>
+    <string name="month">Month</string>
+    <string name="day">Day</string>
+    <string name="about">About the topic...</string>
 </resources>
